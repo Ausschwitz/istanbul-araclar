@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İletişim</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-page {
+      min-height: 100vh;
+      padding: 30px 16px;
+    }
+
+    .contact-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-title {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .contact-text {
+      opacity: 0.92;
+      max-width: 620px;
+      margin: 0 auto 28px auto;
+      line-height: 1.7;
+    }
+
+    .contact-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.20);
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .contact-main-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      min-height: 56px;
+      border-radius: 14px;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .contact-main-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 24px rgba(0,0,0,0.22);
+    }
+
+    .contact-whatsapp {
+      background: linear-gradient(90deg, #1ea952, #25D366);
+    }
+
+    .contact-telegram {
+      background: linear-gradient(90deg, #0077b5, #00a8ff);
+    }
+
+    .contact-empty {
+      display: none;
+      margin-top: 10px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 15px;
+      line-height: 1.6;
+      opacity: 0.92;
+    }
+  </style>
+</head>
+<body onload="loadContact()">
+
+  <header>İletişim</header>
+
+  <div class="menu">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="iletisim.html">İletişim</a>
+  </div>
+
+  <div class="contact-page">
+    <div class="contact-wrap">
+      <h1 class="contact-title">Bizimle İletişime Geç</h1>
+      <p class="contact-text">
+        Hızlı iletişim için aşağıdaki aktif kanalları kullanabilirsiniz.
+      </p>
+
+      <div class="contact-box">
+        <div class="contact-actions" id="contactActions">
+          <a id="whatsappLink" class="contact-main-btn contact-whatsapp" href="#" target="_blank">
+            💬 WhatsApp ile Yaz
+          </a>
+
+          <a id="telegramLink" class="contact-main-btn contact-telegram" href="#" target="_blank">
+            ✈️ Telegram ile Yaz
+          </a>
+        </div>
+
+        <div id="contactEmpty" class="contact-empty">
+          Şu an aktif iletişim kanalı bulunmuyor.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

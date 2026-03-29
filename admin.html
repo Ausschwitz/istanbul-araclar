@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<style>
+:root {
+    --bg: #f3f5f7;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #dfe3e8;
+    --primary: #2563eb;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --secondary: #111827;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.topbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.topbar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 18px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.color-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.color-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.color-box input[type="color"] {
+    width: 60px;
+    height: 42px;
+    padding: 4px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+.vehicle-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+    max-height: 420px;
+    overflow: auto;
+}
+
+.vehicle-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.vehicle-item strong {
+    display: block;
+}
+
+.vehicle-item span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 380px;
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+}
+
+.login-box h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+.slot-help {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .color-row {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+<body onload="checkLogin()">
+
+<div id="loginScreen" class="login-wrap">
+    <div class="login-box">
+        <h2>Admin Giriş</h2>
+
+        <label>Kullanıcı Adı</label>
+        <input id="loginUser" placeholder="Kullanıcı adı">
+
+        <label>Şifre</label>
+        <input id="loginPass" type="password" placeholder="Şifre">
+
+        <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="login()">Giriş Yap</button>
+    </div>
+</div>
+
+<div id="panelScreen" class="hidden">
+    <div class="topbar">
+        <h1>Yönetim Paneli</h1>
+        <div class="topbar-actions">
+            <button class="btn btn-secondary" onclick="openSite()">Siteyi Aç</button>
+            <button class="btn btn-danger" onclick="logout()">Çıkış Yap</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h3>Genel Ayarlar</h3>
+
+                <label>Site Adı</label>
+                <input id="title" placeholder="Site adı">
+
+                <label>Slogan</label>
+                <input id="slogan" placeholder="Slogan">
+
+                <label>Boş Kutu Yazısı</label>
+                <input id="emptyText" placeholder="Yeni sahibini bekliyor">
+
+                <label>Genel WhatsApp</label>
+                <input id="whatsapp" placeholder="90555...">
+
+                <label>Genel Telegram</label>
+                <input id="telegram" placeholder="kullaniciadi">
+
+                <button class="btn btn-success" style="margin-top:14px; width:100%;" onclick="updateSettings()">Genel Ayarları Kaydet</button>
+            </div>
+
+            <div class="card">
+                <h3>Tema ve Düzen</h3>
+
+                <div class="color-row">
+                    <div>
+                        <label>Arka Plan 1</label>
+                        <div class="color-box">
+                            <input type="color" id="bgStart">
+                            <input id="bgStartText" placeholder="#4a0030">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Arka Plan 2</label>
+                        <div class="color-box">
+                            <input type="color" id="bgEnd">
+                            <input id="bgEndText" placeholder="#2a0018">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Başlık Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="headerColor">
+                            <input id="headerColorText" placeholder="#ff4fa3">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Menü Yazı Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="menuColor">
+                            <input id="menuColorText" placeholder="#ffffff">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Genel Yazı Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="textColor">
+                            <input id="textColorText" placeholder="#fff4f8">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Boş Kutu Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="emptyColor">
+                            <input id="emptyColorText" placeholder="#5a5a5a">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Kart Yazı Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="cardTextColor">
+                            <input id="cardTextColorText" placeholder="#ffffff">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Detay Yazı Rengi</label>
+                        <div class="color-box">
+                            <input type="color" id="detailTextColor">
+                            <input id="detailTextColorText" placeholder="#ffffff">
+                        </div>
+                    </div>
+                </div>
+
+                <label>VIP Kutu Sayısı</label>
+                <input id="vipCount" type="number" min="0">
+
+                <label>Normal Kutu Sayısı</label>
+                <input id="normalCount" type="number" min="0">
+
+                <label>Küçük Kutular Satır Başına</label>
+                <input id="gridCount" type="number" min="1" max="8">
+
+                <button class="btn btn-success" style="margin-top:14px; width:100%;" onclick="updateThemeSettings()">Tema ve Düzeni Kaydet</button>
+            </div>
+
+            <div class="card">
+                <h3>Şifre Değiştir</h3>
+
+                <label>Yeni Şifre</label>
+                <input id="newPassword" type="password" placeholder="Yeni şifre">
+
+                <label>Yeni Şifre Tekrar</label>
+                <input id="newPasswordRepeat" type="password" placeholder="Yeni şifre tekrar">
+
+                <button class="btn btn-primary" style="margin-top:14px; width:100%;" onclick="changePassword()">Şifreyi Güncelle</button>
+                <div class="note">Kullanıcı adı sabit: <strong>admin</strong></div>
+            </div>
+
+            <div class="card">
+                <h3>Araç Ekle / Düzenle</h3>
+
+                <input type="hidden" id="editId">
+
+                <label>Araç Adı</label>
+                <input id="name" placeholder="Araç adı">
+
+                <label>Kutu İç Yazısı</label>
+                <input id="cardLabel" placeholder="Örn: Yeni / Özel / Tam Seviyelik">
+
+                <label>Foto Linkleri</label>
+                <textarea id="images" placeholder="Her satıra 1 fotoğraf linki"></textarea>
+
+                <label>Yaş</label>
+                <input id="age" placeholder="2022">
+
+                <label>Boy</label>
+                <input id="height" placeholder="4.8 metre">
+
+                <label>Kilo</label>
+                <input id="weight" placeholder="1800 kg">
+
+                <label>Açıklama</label>
+                <textarea id="desc" placeholder="Açıklama"></textarea>
+
+                <label>Telefon</label>
+                <input id="phone" placeholder="Telefon numarası">
+
+                <label>WhatsApp</label>
+                <input id="carWhatsapp" placeholder="90555...">
+
+                <label>Telegram</label>
+                <input id="carTelegram" placeholder="kullaniciadi">
+
+                <label>Kutu Türü</label>
+                <select id="type" onchange="toggleSlotInputs()">
+                    <option value="vip">VIP</option>
+                    <option value="normal">Normal</option>
+                </select>
+
+                <div id="vipSlotWrap">
+                    <label>VIP Kutu Numarası</label>
+                    <input id="vipSlot" type="number" min="1" placeholder="Örn: 7">
+                    <div class="slot-help">VIP sıralama: soldan sağa 1, 2; alt satır 3, 4 şeklinde gider.</div>
+                </div>
+
+                <div id="normalSlotWrap" style="display:none;">
+                    <label>Normal Kutu Numarası</label>
+                    <input id="normalSlot" type="number" min="1" placeholder="Örn: 34">
+                    <div class="slot-help">Normal sıralama: soldan sağa 1,2,3,4,5; alt satır 6,7,8... şeklinde gider.</div>
+                </div>
+
+                <button id="saveBtn" class="btn btn-success" style="margin-top:14px; width:100%;" onclick="saveCar()">Araç Kaydet</button>
+                <button id="cancelEditBtn" class="btn btn-secondary" style="margin-top:10px; width:100%; display:none;" onclick="cancelEdit()">Düzenlemeyi İptal Et</button>
+            </div>
+
+            <div class="card full">
+                <h3>Araçları Yönet</h3>
+                <div id="vehicleList" class="vehicle-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+const ADMIN_USER = "admin";
+const DEFAULT_ADMIN_PASS = "a203c0bbcf";
+
+function getAdminPassword(){
+    return localStorage.getItem("adminPassword") || DEFAULT_ADMIN_PASS;
+}
+
+function login(){
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value;
+
+    if(user === ADMIN_USER && pass === getAdminPassword()){
+        localStorage.setItem("adminLogin", "true");
+        showPanel();
+    } else {
+        alert("Kullanıcı adı veya şifre hatalı");
+    }
+}
+
+function checkLogin(){
+    if(localStorage.getItem("adminLogin") === "true"){
+        showPanel();
+    }
+}
+
+function showPanel(){
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("panelScreen").classList.remove("hidden");
+    loadAdmin();
+    loadVehicleList();
+    toggleSlotInputs();
+}
+
+function logout(){
+    localStorage.removeItem("adminLogin");
+    location.reload();
+}
+
+function openSite(){
+    window.open("index.html", "_blank");
+}
+
+function changePassword(){
+    const p1 = document.getElementById("newPassword").value;
+    const p2 = document.getElementById("newPasswordRepeat").value;
+
+    if(!p1 || !p2){
+        alert("Şifre alanlarını doldur");
+        return;
+    }
+
+    if(p1 !== p2){
+        alert("Şifreler eşleşmiyor");
+        return;
+    }
+
+    localStorage.setItem("adminPassword", p1);
+    alert("Şifre güncellendi");
+    document.getElementById("newPassword").value = "";
+    document.getElementById("newPasswordRepeat").value = "";
+}
+
+function toggleSlotInputs(){
+    const type = document.getElementById("type").value;
+    document.getElementById("vipSlotWrap").style.display = type === "vip" ? "block" : "none";
+    document.getElementById("normalSlotWrap").style.display = type === "normal" ? "block" : "none";
+}
+</script>
+</body>
+</html>
