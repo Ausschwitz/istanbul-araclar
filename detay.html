@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Araç Detayı</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detay</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body onload="loadDetail()">
-  <div id="content" class="detail-page"></div>
+  <header>
+    <h1 id="siteTitle">Araç Detayı</h1>
+    <p id="slogan">Detaylı inceleme</p>
+  </header>
+
+  <nav class="menu">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="iletisim.html">İletişim</a>
+  </nav>
+
+  <main class="page-wrap">
+    <div id="content" class="detail-container">
+      Yükleniyor...
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
