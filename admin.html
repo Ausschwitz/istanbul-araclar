@@ -268,8 +268,12 @@
           <label>Kutu İç Yazısı</label>
           <input id="cardLabel" placeholder="Örn: Yeni / Özel / Güzeldir">
 
-          <label>Foto Linkleri</label>
-          <textarea id="images" placeholder="Her satıra 1 fotoğraf linki"></textarea>
+          <label>Fotoğraflar</label>
+          <input id="imageFiles" type="file" accept="image/*" multiple>
+          <div class="slot-help">Birden fazla foto seçebilirsin.</div>
+
+          <label>Yüklenen / Eklenen Foto Linkleri</label>
+          <textarea id="images" placeholder="Yüklenen fotoğraflar burada görünecek"></textarea>
 
           <label>Yaş</label>
           <input id="age" placeholder="2023">
@@ -326,7 +330,8 @@
             Burada eklediğin araçları siteye giren herkes görebilir.
           </p>
           <p class="muted">
-            Fotoğraflar için şimdilik direkt link kullanıyoruz.
+            Artık fotoğrafları direkt yükleyebilirsin.
+            Sistem dosyaları Supabase Storage içine yükler.
           </p>
         </div>
 
@@ -354,6 +359,15 @@
       const box = document.getElementById(targetId);
       box.className = "status-box";
       box.textContent = "";
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     async function initPage(){
@@ -418,6 +432,7 @@
       document.getElementById("editId").value = "";
       document.getElementById("name").value = "";
       document.getElementById("cardLabel").value = "";
+      document.getElementById("imageFiles").value = "";
       document.getElementById("images").value = "";
       document.getElementById("age").value = "";
       document.getElementById("height").value = "";
@@ -438,13 +453,33 @@
       clearCarForm();
     }
 
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    async function uploadImages(files){
+      const uploadedUrls = [];
+
+      for (const file of files) {
+        const ext = file.name.split(".").pop() || "jpg";
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const filePath = `cars/${fileName}`;
+
+        const { error } = await sb.storage
+          .from("car-images")
+          .upload(filePath, file, {
+            contentType: file.type || "image/jpeg",
+            upsert: false
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        const { data } = sb.storage
+          .from("car-images")
+          .getPublicUrl(filePath);
+
+        uploadedUrls.push(data.publicUrl);
+      }
+
+      return uploadedUrls;
     }
 
     async function loadVehicleList(){
@@ -516,10 +551,26 @@
       const vipSlotValue = parseInt(document.getElementById("vipSlot").value || "0", 10);
       const normalSlotValue = parseInt(document.getElementById("normalSlot").value || "0", 10);
 
-      const images = document.getElementById("images").value
+      const imageInput = document.getElementById("imageFiles");
+      const selectedFiles = Array.from(imageInput.files || []);
+
+      let uploadedImages = [];
+      if (selectedFiles.length > 0) {
+        try {
+          uploadedImages = await uploadImages(selectedFiles);
+        } catch (error) {
+          showStatus("panelStatus", "Fotoğraf yükleme hatası: " + error.message, "error");
+          return;
+        }
+      }
+
+      const manualImages = document.getElementById("images").value
         .split("\n")
         .map(x => x.trim())
         .filter(Boolean);
+
+      const images = [...manualImages, ...uploadedImages];
+      document.getElementById("images").value = images.join("\n");
 
       const payload = {
         name: document.getElementById("name").value.trim(),
