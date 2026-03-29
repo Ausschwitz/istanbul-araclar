@@ -39,6 +39,7 @@ header{
 header h1{
   margin:0 0 10px;
   font-size:38px;
+  color:var(--header-color);
 }
 
 header p{
@@ -59,7 +60,7 @@ header p{
 }
 
 .menu a{
-  color:#fff;
+  color:var(--menu-color);
   text-decoration:none;
   font-weight:700;
 }
@@ -83,13 +84,13 @@ header p{
 
 .normal-grid{
   display:grid;
-  grid-template-columns:repeat(5, 1fr);
+  grid-template-columns:repeat(var(--grid-count), 1fr);
   gap:12px;
 }
 
 .card{
   position:relative;
-  background:rgba(255,255,255,.04);
+  background:#2a0018;
   border:1px solid rgba(255,255,255,.10);
   border-radius:18px;
   overflow:hidden;
@@ -144,6 +145,7 @@ header p{
   background:linear-gradient(transparent, rgba(0,0,0,.82));
   font-weight:700;
   z-index:2;
+  color:var(--card-text-color);
 }
 
 .empty-box{
@@ -152,11 +154,12 @@ header p{
   justify-content:center;
   text-align:center;
   min-height:165px;
-  background:rgba(255,255,255,.05);
-  color:#f1d9e5;
+  background:#3a0025;
+  color:#ffd6e8;
   border:1px dashed rgba(255,255,255,.15);
   border-radius:18px;
   padding:16px;
+  font-weight:600;
 }
 
 .vip-empty{
@@ -179,6 +182,7 @@ header p{
   margin:0 0 18px;
   text-align:center;
   font-size:34px;
+  color:var(--detail-text-color);
 }
 
 .detail-gallery{
