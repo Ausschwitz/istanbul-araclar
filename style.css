@@ -333,3 +333,15 @@ header {
 .telegram-btn {
     background: linear-gradient(90deg, #0077b5, #00a8ff);
 }
+body {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
