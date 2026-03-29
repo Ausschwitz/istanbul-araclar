@@ -1,516 +1,652 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
 
-<style>
-:root {
-    --bg: #f3f5f7;
-    --card: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --border: #dfe3e8;
-    --primary: #2563eb;
-    --danger: #dc2626;
-    --success: #16a34a;
-    --secondary: #111827;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
-
-.topbar {
-    background: white;
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.topbar h1 {
-    margin: 0;
-    font-size: 22px;
-}
-
-.topbar-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 18px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-}
-
-.card h3 {
-    margin-top: 0;
-    margin-bottom: 14px;
-    font-size: 18px;
-}
-
-label {
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 700;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--text);
-    font-size: 14px;
-}
-
-textarea {
-    min-height: 110px;
-    resize: vertical;
-}
-
-.color-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.color-box {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.color-box input[type="color"] {
-    width: 60px;
-    height: 42px;
-    padding: 4px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.btn {
-    border: none;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn-danger {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-success {
-    background: var(--success);
-    color: white;
-}
-
-.btn-secondary {
-    background: var(--secondary);
-    color: white;
-}
-
-.vehicle-list {
-    display: grid;
-    gap: 10px;
-    margin-top: 14px;
-    max-height: 420px;
-    overflow: auto;
-}
-
-.vehicle-item {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-}
-
-.vehicle-item strong {
-    display: block;
-}
-
-.vehicle-item span {
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.login-wrap {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.login-box {
-    width: 100%;
-    max-width: 380px;
-    background: white;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    border: 1px solid var(--border);
-}
-
-.login-box h2 {
-    margin-top: 0;
-    margin-bottom: 18px;
-    text-align: center;
-}
-
-.hidden {
-    display: none !important;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
-
-.note {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 8px;
-}
-
-.slot-help {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 6px;
-}
-
-@media (max-width: 900px) {
-    .grid {
-        grid-template-columns: 1fr;
+  <style>
+    :root{
+      --bg:#f3f5f7;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#dfe3e8;
+      --primary:#2563eb;
+      --danger:#dc2626;
+      --success:#16a34a;
+      --secondary:#111827;
     }
 
-    .color-row {
-        grid-template-columns: 1fr;
+    *{
+      box-sizing:border-box;
     }
 
-    .topbar {
-        align-items: flex-start;
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
-}
-</style>
+
+    .hidden{
+      display:none !important;
+    }
+
+    .login-wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .login-box{
+      width:100%;
+      max-width:380px;
+      background:#fff;
+      padding:24px;
+      border-radius:16px;
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      border:1px solid var(--border);
+    }
+
+    .login-box h2{
+      margin:0 0 18px;
+      text-align:center;
+      font-size:24px;
+    }
+
+    .topbar{
+      background:#fff;
+      border-bottom:1px solid var(--border);
+      padding:16px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .topbar h1{
+      margin:0;
+      font-size:22px;
+    }
+
+    .topbar-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      box-shadow:0 6px 18px rgba(0,0,0,.04);
+    }
+
+    .card h3{
+      margin:0 0 14px;
+      font-size:18px;
+    }
+
+    .full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      display:block;
+      margin-top:12px;
+      margin-bottom:6px;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    input, textarea, select{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .btn{
+      border:none;
+      border-radius:10px;
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .btn-danger{
+      background:var(--danger);
+      color:#fff;
+    }
+
+    .btn-success{
+      background:var(--success);
+      color:#fff;
+    }
+
+    .btn-secondary{
+      background:var(--secondary);
+      color:#fff;
+    }
+
+    .vehicle-list{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+      max-height:480px;
+      overflow:auto;
+    }
+
+    .vehicle-item{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .vehicle-item strong{
+      display:block;
+    }
+
+    .vehicle-item span{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .note{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    .slot-help{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .status-box{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:10px;
+      font-size:14px;
+      font-weight:700;
+      display:none;
+    }
+
+    .status-success{
+      display:block;
+      background:#ecfdf3;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .status-error{
+      display:block;
+      background:#fef2f2;
+      color:#991b1b;
+      border:1px solid #fecaca;
+    }
+
+    .muted{
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    @media (max-width: 900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
-<body onload="checkLogin()">
+<body onload="initPage()">
 
-<div id="loginScreen" class="login-wrap">
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-wrap">
     <div class="login-box">
-        <h2>Admin Giriş</h2>
+      <h2>Admin Giriş</h2>
 
-        <label>Kullanıcı Adı</label>
-        <input id="loginUser" placeholder="Kullanıcı adı">
+      <label>Email</label>
+      <input id="loginEmail" type="email" placeholder="Email">
 
-        <label>Şifre</label>
-        <input id="loginPass" type="password" placeholder="Şifre">
+      <label>Şifre</label>
+      <input id="loginPassword" type="password" placeholder="Şifre">
 
-        <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="login()">Giriş Yap</button>
+      <button class="btn btn-primary" style="width:100%; margin-top:14px;" onclick="login()">
+        Giriş Yap
+      </button>
+
+      <div id="loginStatus" class="status-box"></div>
     </div>
-</div>
+  </div>
 
-<div id="panelScreen" class="hidden">
+  <!-- PANEL -->
+  <div id="panelScreen" class="hidden">
     <div class="topbar">
-        <h1>Yönetim Paneli</h1>
-        <div class="topbar-actions">
-            <button class="btn btn-secondary" onclick="openSite()">Siteyi Aç</button>
-            <button class="btn btn-danger" onclick="logout()">Çıkış Yap</button>
-        </div>
+      <h1>Yönetim Paneli</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary" onclick="openSite()">Siteyi Aç</button>
+        <button class="btn btn-danger" onclick="logout()">Çıkış Yap</button>
+      </div>
     </div>
 
     <div class="container">
-        <div class="grid">
-            <div class="card">
-                <h3>Genel Ayarlar</h3>
+      <div id="panelStatus" class="status-box"></div>
 
-                <label>Site Adı</label>
-                <input id="title" placeholder="Site adı">
+      <div class="grid">
+        <div class="card">
+          <h3>Araç Ekle / Düzenle</h3>
 
-                <label>Slogan</label>
-                <input id="slogan" placeholder="Slogan">
+          <input type="hidden" id="editId">
 
-                <label>Boş Kutu Yazısı</label>
-                <input id="emptyText" placeholder="Yeni sahibini bekliyor">
+          <label>Araç Adı</label>
+          <input id="name" placeholder="Araç adı">
 
-                <label>Genel WhatsApp</label>
-                <input id="whatsapp" placeholder="90555...">
+          <label>Kutu İç Yazısı</label>
+          <input id="cardLabel" placeholder="Örn: Yeni / Özel / Güzeldir">
 
-                <label>Genel Telegram</label>
-                <input id="telegram" placeholder="kullaniciadi">
+          <label>Foto Linkleri</label>
+          <textarea id="images" placeholder="Her satıra 1 fotoğraf linki"></textarea>
 
-                <button class="btn btn-success" style="margin-top:14px; width:100%;" onclick="updateSettings()">Genel Ayarları Kaydet</button>
-            </div>
+          <label>Yaş</label>
+          <input id="age" placeholder="2023">
 
-            <div class="card">
-                <h3>Tema ve Düzen</h3>
+          <label>Boy</label>
+          <input id="height" placeholder="4.8 metre">
 
-                <div class="color-row">
-                    <div>
-                        <label>Arka Plan 1</label>
-                        <div class="color-box">
-                            <input type="color" id="bgStart">
-                            <input id="bgStartText" placeholder="#4a0030">
-                        </div>
-                    </div>
+          <label>Kilo</label>
+          <input id="weight" placeholder="1800 kg">
 
-                    <div>
-                        <label>Arka Plan 2</label>
-                        <div class="color-box">
-                            <input type="color" id="bgEnd">
-                            <input id="bgEndText" placeholder="#2a0018">
-                        </div>
-                    </div>
+          <label>Açıklama</label>
+          <textarea id="description" placeholder="Açıklama"></textarea>
 
-                    <div>
-                        <label>Başlık Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="headerColor">
-                            <input id="headerColorText" placeholder="#ff4fa3">
-                        </div>
-                    </div>
+          <label>Telefon</label>
+          <input id="phone" placeholder="Telefon numarası">
 
-                    <div>
-                        <label>Menü Yazı Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="menuColor">
-                            <input id="menuColorText" placeholder="#ffffff">
-                        </div>
-                    </div>
+          <label>WhatsApp</label>
+          <input id="whatsapp" placeholder="90555...">
 
-                    <div>
-                        <label>Genel Yazı Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="textColor">
-                            <input id="textColorText" placeholder="#fff4f8">
-                        </div>
-                    </div>
+          <label>Telegram</label>
+          <input id="telegram" placeholder="kullaniciadi">
 
-                    <div>
-                        <label>Boş Kutu Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="emptyColor">
-                            <input id="emptyColorText" placeholder="#5a5a5a">
-                        </div>
-                    </div>
+          <label>Kutu Türü</label>
+          <select id="type" onchange="toggleSlotInputs()">
+            <option value="vip">VIP</option>
+            <option value="normal">Normal</option>
+          </select>
 
-                    <div>
-                        <label>Kart Yazı Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="cardTextColor">
-                            <input id="cardTextColorText" placeholder="#ffffff">
-                        </div>
-                    </div>
+          <div id="vipSlotWrap">
+            <label>VIP Kutu Numarası</label>
+            <input id="vipSlot" type="number" min="1" placeholder="Örn: 7">
+            <div class="slot-help">VIP sıralama: soldan sağa 1, 2; alt satır 3, 4 şeklinde gider.</div>
+          </div>
 
-                    <div>
-                        <label>Detay Yazı Rengi</label>
-                        <div class="color-box">
-                            <input type="color" id="detailTextColor">
-                            <input id="detailTextColorText" placeholder="#ffffff">
-                        </div>
-                    </div>
-                </div>
+          <div id="normalSlotWrap" class="hidden">
+            <label>Normal Kutu Numarası</label>
+            <input id="normalSlot" type="number" min="1" placeholder="Örn: 34">
+            <div class="slot-help">Normal sıralama: soldan sağa 1,2,3,4,5; alt satır 6,7,8... şeklinde gider.</div>
+          </div>
 
-                <label>VIP Kutu Sayısı</label>
-                <input id="vipCount" type="number" min="0">
+          <button id="saveBtn" class="btn btn-success" style="margin-top:14px; width:100%;" onclick="saveCar()">
+            Araç Kaydet
+          </button>
 
-                <label>Normal Kutu Sayısı</label>
-                <input id="normalCount" type="number" min="0">
-
-                <label>Küçük Kutular Satır Başına</label>
-                <input id="gridCount" type="number" min="1" max="8">
-
-                <button class="btn btn-success" style="margin-top:14px; width:100%;" onclick="updateThemeSettings()">Tema ve Düzeni Kaydet</button>
-            </div>
-
-            <div class="card">
-                <h3>Şifre Değiştir</h3>
-
-                <label>Yeni Şifre</label>
-                <input id="newPassword" type="password" placeholder="Yeni şifre">
-
-                <label>Yeni Şifre Tekrar</label>
-                <input id="newPasswordRepeat" type="password" placeholder="Yeni şifre tekrar">
-
-                <button class="btn btn-primary" style="margin-top:14px; width:100%;" onclick="changePassword()">Şifreyi Güncelle</button>
-                <div class="note">Kullanıcı adı sabit: <strong>admin</strong></div>
-            </div>
-
-            <div class="card">
-                <h3>Araç Ekle / Düzenle</h3>
-
-                <input type="hidden" id="editId">
-
-                <label>Araç Adı</label>
-                <input id="name" placeholder="Araç adı">
-
-                <label>Kutu İç Yazısı</label>
-                <input id="cardLabel" placeholder="Örn: Yeni / Özel / Tam Seviyelik">
-
-                <label>Foto Linkleri</label>
-                <textarea id="images" placeholder="Her satıra 1 fotoğraf linki"></textarea>
-
-                <label>Yaş</label>
-                <input id="age" placeholder="2022">
-
-                <label>Boy</label>
-                <input id="height" placeholder="4.8 metre">
-
-                <label>Kilo</label>
-                <input id="weight" placeholder="1800 kg">
-
-                <label>Açıklama</label>
-                <textarea id="desc" placeholder="Açıklama"></textarea>
-
-                <label>Telefon</label>
-                <input id="phone" placeholder="Telefon numarası">
-
-                <label>WhatsApp</label>
-                <input id="carWhatsapp" placeholder="90555...">
-
-                <label>Telegram</label>
-                <input id="carTelegram" placeholder="kullaniciadi">
-
-                <label>Kutu Türü</label>
-                <select id="type" onchange="toggleSlotInputs()">
-                    <option value="vip">VIP</option>
-                    <option value="normal">Normal</option>
-                </select>
-
-                <div id="vipSlotWrap">
-                    <label>VIP Kutu Numarası</label>
-                    <input id="vipSlot" type="number" min="1" placeholder="Örn: 7">
-                    <div class="slot-help">VIP sıralama: soldan sağa 1, 2; alt satır 3, 4 şeklinde gider.</div>
-                </div>
-
-                <div id="normalSlotWrap" style="display:none;">
-                    <label>Normal Kutu Numarası</label>
-                    <input id="normalSlot" type="number" min="1" placeholder="Örn: 34">
-                    <div class="slot-help">Normal sıralama: soldan sağa 1,2,3,4,5; alt satır 6,7,8... şeklinde gider.</div>
-                </div>
-
-                <button id="saveBtn" class="btn btn-success" style="margin-top:14px; width:100%;" onclick="saveCar()">Araç Kaydet</button>
-                <button id="cancelEditBtn" class="btn btn-secondary" style="margin-top:10px; width:100%; display:none;" onclick="cancelEdit()">Düzenlemeyi İptal Et</button>
-            </div>
-
-            <div class="card full">
-                <h3>Araçları Yönet</h3>
-                <div id="vehicleList" class="vehicle-list"></div>
-            </div>
+          <button id="cancelEditBtn" class="btn btn-secondary hidden" style="margin-top:10px; width:100%;" onclick="cancelEdit()">
+            Düzenlemeyi İptal Et
+          </button>
         </div>
+
+        <div class="card">
+          <h3>Bilgi</h3>
+          <p class="muted">
+            Bu panel artık verileri Supabase veritabanına kaydeder.
+            Burada eklediğin araçları siteye giren herkes görebilir.
+          </p>
+          <p class="muted">
+            Şimdilik fotoğraflar için direkt link kullanıyoruz.
+            Sonra istersek Supabase Storage da ekleriz.
+          </p>
+          <p class="muted">
+            Bu dosya sadece admin panel içindir.
+            Ana sayfayı da birazdan Supabase’den veri okuyacak hale getireceğiz.
+          </p>
+        </div>
+
+        <div class="card full">
+          <h3>Araçları Yönet</h3>
+          <div id="vehicleList" class="vehicle-list"></div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<script src="app.js"></script>
-<script>
-const ADMIN_USER = "admin";
-const DEFAULT_ADMIN_PASS = "a203c0bbcf";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://ynwybfequmttfqrloqtl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_HmDxeh3imA0fEW8h6ygz-g_2zssLCfo";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function getAdminPassword(){
-    return localStorage.getItem("adminPassword") || DEFAULT_ADMIN_PASS;
-}
+    function showStatus(targetId, message, type = "success"){
+      const box = document.getElementById(targetId);
+      box.className = "status-box " + (type === "success" ? "status-success" : "status-error");
+      box.textContent = message;
+    }
 
-function login(){
-    const user = document.getElementById("loginUser").value.trim();
-    const pass = document.getElementById("loginPass").value;
+    function clearStatus(targetId){
+      const box = document.getElementById(targetId);
+      box.className = "status-box";
+      box.textContent = "";
+    }
 
-    if(user === ADMIN_USER && pass === getAdminPassword()){
-        localStorage.setItem("adminLogin", "true");
+    async function initPage(){
+      toggleSlotInputs();
+
+      const { data: { session } } = await sb.auth.getSession();
+
+      if(session){
         showPanel();
-    } else {
-        alert("Kullanıcı adı veya şifre hatalı");
+      } else {
+        showLogin();
+      }
     }
-}
 
-function checkLogin(){
-    if(localStorage.getItem("adminLogin") === "true"){
-        showPanel();
+    function showLogin(){
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("panelScreen").classList.add("hidden");
     }
-}
 
-function showPanel(){
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("panelScreen").classList.remove("hidden");
-    loadAdmin();
-    loadVehicleList();
-    toggleSlotInputs();
-}
+    async function showPanel(){
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("panelScreen").classList.remove("hidden");
+      clearCarForm();
+      await loadVehicleList();
+    }
 
-function logout(){
-    localStorage.removeItem("adminLogin");
-    location.reload();
-}
+    async function login(){
+      clearStatus("loginStatus");
 
-function openSite(){
-    window.open("index.html", "_blank");
-}
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
 
-function changePassword(){
-    const p1 = document.getElementById("newPassword").value;
-    const p2 = document.getElementById("newPasswordRepeat").value;
+      const { error } = await sb.auth.signInWithPassword({
+        email,
+        password
+      });
 
-    if(!p1 || !p2){
-        alert("Şifre alanlarını doldur");
+      if(error){
+        showStatus("loginStatus", "Giriş başarısız: " + error.message, "error");
         return;
+      }
+
+      await showPanel();
     }
 
-    if(p1 !== p2){
-        alert("Şifreler eşleşmiyor");
+    async function logout(){
+      await sb.auth.signOut();
+      showLogin();
+    }
+
+    function openSite(){
+      window.open("index.html", "_blank");
+    }
+
+    function toggleSlotInputs(){
+      const type = document.getElementById("type").value;
+      document.getElementById("vipSlotWrap").classList.toggle("hidden", type !== "vip");
+      document.getElementById("normalSlotWrap").classList.toggle("hidden", type !== "normal");
+    }
+
+    function clearCarForm(){
+      document.getElementById("editId").value = "";
+      document.getElementById("name").value = "";
+      document.getElementById("cardLabel").value = "";
+      document.getElementById("images").value = "";
+      document.getElementById("age").value = "";
+      document.getElementById("height").value = "";
+      document.getElementById("weight").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("whatsapp").value = "";
+      document.getElementById("telegram").value = "";
+      document.getElementById("type").value = "vip";
+      document.getElementById("vipSlot").value = "";
+      document.getElementById("normalSlot").value = "";
+      document.getElementById("saveBtn").textContent = "Araç Kaydet";
+      document.getElementById("cancelEditBtn").classList.add("hidden");
+      toggleSlotInputs();
+    }
+
+    function cancelEdit(){
+      clearCarForm();
+    }
+
+    async function loadVehicleList(){
+      clearStatus("panelStatus");
+
+      const list = document.getElementById("vehicleList");
+      list.innerHTML = "Yükleniyor...";
+
+      const { data, error } = await sb
+        .from("cars")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if(error){
+        list.innerHTML = "";
+        showStatus("panelStatus", "Araçlar yüklenemedi: " + error.message, "error");
         return;
+      }
+
+      if(!data || data.length === 0){
+        list.innerHTML = `
+          <div class="vehicle-item">
+            <div>
+              <strong>Henüz araç eklenmedi</strong>
+              <span>Liste boş</span>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = "";
+
+      const sorted = [...data].sort((a, b) => {
+        if(a.type === b.type){
+          const aSlot = a.type === "vip" ? (a.vip_slot || 99999) : (a.normal_slot || 99999);
+          const bSlot = b.type === "vip" ? (b.vip_slot || 99999) : (b.normal_slot || 99999);
+          return aSlot - bSlot;
+        }
+        return a.type === "vip" ? -1 : 1;
+      });
+
+      sorted.forEach(car => {
+        const slotText = car.type === "vip"
+          ? `VIP Kutu: ${car.vip_slot || "-"}`
+          : `Normal Kutu: ${car.normal_slot || "-"}`;
+
+        const item = document.createElement("div");
+        item.className = "vehicle-item";
+        item.innerHTML = `
+          <div>
+            <strong>${escapeHtml(car.name)}</strong>
+            <span>${car.type === "vip" ? "VIP" : "Normal"} • ${slotText}</span>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="editCar('${car.id}')">Düzenle</button>
+            <button class="btn btn-danger" onclick="deleteCar('${car.id}')">Sil</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
     }
 
-    localStorage.setItem("adminPassword", p1);
-    alert("Şifre güncellendi");
-    document.getElementById("newPassword").value = "";
-    document.getElementById("newPasswordRepeat").value = "";
-}
+    async function saveCar(){
+      clearStatus("panelStatus");
 
-function toggleSlotInputs(){
-    const type = document.getElementById("type").value;
-    document.getElementById("vipSlotWrap").style.display = type === "vip" ? "block" : "none";
-    document.getElementById("normalSlotWrap").style.display = type === "normal" ? "block" : "none";
-}
-</script>
+      const editId = document.getElementById("editId").value.trim();
+      const type = document.getElementById("type").value;
+      const vipSlotValue = parseInt(document.getElementById("vipSlot").value || "0", 10);
+      const normalSlotValue = parseInt(document.getElementById("normalSlot").value || "0", 10);
+
+      const images = document.getElementById("images").value
+        .split("\n")
+        .map(x => x.trim())
+        .filter(Boolean);
+
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+        card_label: document.getElementById("cardLabel").value.trim() || null,
+        images,
+        age: document.getElementById("age").value.trim() || null,
+        height: document.getElementById("height").value.trim() || null,
+        weight: document.getElementById("weight").value.trim() || null,
+        description: document.getElementById("description").value.trim() || null,
+        phone: document.getElementById("phone").value.trim() || null,
+        whatsapp: document.getElementById("whatsapp").value.trim() || null,
+        telegram: document.getElementById("telegram").value.trim() || null,
+        type,
+        vip_slot: type === "vip" ? vipSlotValue : null,
+        normal_slot: type === "normal" ? normalSlotValue : null,
+        is_active: true
+      };
+
+      if(!payload.name){
+        showStatus("panelStatus", "Araç adı gerekli", "error");
+        return;
+      }
+
+      if(type === "vip" && (!vipSlotValue || vipSlotValue < 1)){
+        showStatus("panelStatus", "VIP kutu numarası gerekli", "error");
+        return;
+      }
+
+      if(type === "normal" && (!normalSlotValue || normalSlotValue < 1)){
+        showStatus("panelStatus", "Normal kutu numarası gerekli", "error");
+        return;
+      }
+
+      let result;
+
+      if(editId){
+        result = await sb
+          .from("cars")
+          .update(payload)
+          .eq("id", editId);
+      } else {
+        result = await sb
+          .from("cars")
+          .insert([payload]);
+      }
+
+      if(result.error){
+        showStatus("panelStatus", "Kayıt hatası: " + result.error.message, "error");
+        return;
+      }
+
+      showStatus("panelStatus", editId ? "Araç güncellendi" : "Araç eklendi", "success");
+      clearCarForm();
+      await loadVehicleList();
+    }
+
+    async function editCar(id){
+      clearStatus("panelStatus");
+
+      const { data, error } = await sb
+        .from("cars")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if(error){
+        showStatus("panelStatus", "Araç getirilemedi: " + error.message, "error");
+        return;
+      }
+
+      document.getElementById("editId").value = data.id;
+      document.getElementById("name").value = data.name || "";
+      document.getElementById("cardLabel").value = data.card_label || "";
+      document.getElementById("images").value = (data.images || []).join("\n");
+      document.getElementById("age").value = data.age || "";
+      document.getElementById("height").value = data.height || "";
+      document.getElementById("weight").value = data.weight || "";
+      document.getElementById("description").value = data.description || "";
+      document.getElementById("phone").value = data.phone || "";
+      document.getElementById("whatsapp").value = data.whatsapp || "";
+      document.getElementById("telegram").value = data.telegram || "";
+      document.getElementById("type").value = data.type || "vip";
+      document.getElementById("vipSlot").value = data.vip_slot || "";
+      document.getElementById("normalSlot").value = data.normal_slot || "";
+      document.getElementById("saveBtn").textContent = "Araç Güncelle";
+      document.getElementById("cancelEditBtn").classList.remove("hidden");
+
+      toggleSlotInputs();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteCar(id){
+      const ok = confirm("Bu aracı silmek istiyor musun?");
+      if(!ok) return;
+
+      clearStatus("panelStatus");
+
+      const { error } = await sb
+        .from("cars")
+        .delete()
+        .eq("id", id);
+
+      if(error){
+        showStatus("panelStatus", "Silme hatası: " + error.message, "error");
+        return;
+      }
+
+      showStatus("panelStatus", "Araç silindi", "success");
+      await loadVehicleList();
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
 </body>
 </html>
