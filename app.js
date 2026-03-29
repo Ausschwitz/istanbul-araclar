@@ -107,13 +107,13 @@ async function loadCars() {
   applyThemeToPage();
   setHeaderTexts(settings.title, settings.slogan);
 
-  const vipContainer = document.getElementById("vipCars") || document.getElementById("vip");
-  const normalContainer = document.getElementById("normalCars") || document.getElementById("normal");
+  const vipContainer = document.getElementById("vipCars");
+  const normalContainer = document.getElementById("normalCars");
 
   if (!vipContainer || !normalContainer) return;
 
-  vipContainer.innerHTML = `<div class="empty-box vip-empty">Yükleniyor...</div>`;
-  normalContainer.innerHTML = `<div class="empty-box">Yükleniyor...</div>`;
+  vipContainer.innerHTML = "";
+  normalContainer.innerHTML = "";
 
   const { data, error } = await sb
     .from("cars")
@@ -129,27 +129,34 @@ async function loadCars() {
 
   const cars = Array.isArray(data) ? data : [];
 
-  const vipCars = cars
-    .filter((car) => car.type === "vip")
-    .sort((a, b) => (a.vip_slot || 99999) - (b.vip_slot || 99999));
+  for (let i = 1; i <= settings.vipCount; i++) {
+    const car = cars.find(
+      (item) => item.type === "vip" && Number(item.vip_slot) === i
+    );
 
-  const normalCars = cars
-    .filter((car) => car.type === "normal")
-    .sort((a, b) => (a.normal_slot || 99999) - (b.normal_slot || 99999));
-
-  vipContainer.innerHTML = "";
-  normalContainer.innerHTML = "";
-
-  if (vipCars.length === 0) {
-    vipContainer.innerHTML = `<div class="empty-box vip-empty">${escapeHtml(settings.emptyText)}</div>`;
-  } else {
-    vipCars.forEach((car) => vipContainer.appendChild(createVipCard(car)));
+    if (car) {
+      vipContainer.appendChild(createVipCard(car));
+    } else {
+      const empty = document.createElement("div");
+      empty.className = "empty-box vip-empty";
+      empty.textContent = settings.emptyText;
+      vipContainer.appendChild(empty);
+    }
   }
 
-  if (normalCars.length === 0) {
-    normalContainer.innerHTML = `<div class="empty-box">${escapeHtml(settings.emptyText)}</div>`;
-  } else {
-    normalCars.forEach((car) => normalContainer.appendChild(createNormalCard(car)));
+  for (let i = 1; i <= settings.normalCount; i++) {
+    const car = cars.find(
+      (item) => item.type === "normal" && Number(item.normal_slot) === i
+    );
+
+    if (car) {
+      normalContainer.appendChild(createNormalCard(car));
+    } else {
+      const empty = document.createElement("div");
+      empty.className = "empty-box";
+      empty.textContent = settings.emptyText;
+      normalContainer.appendChild(empty);
+    }
   }
 }
 
@@ -231,7 +238,7 @@ async function loadDetail() {
   `;
 }
 
-function loadContact() {
+async function loadContact() {
   applyThemeToPage();
   setHeaderTexts(
     "Bizimle İletişime Geç",
@@ -242,11 +249,24 @@ function loadContact() {
   const tg = document.getElementById("telegramLink");
   const empty = document.getElementById("contactEmpty");
 
+  const { data, error } = await sb
+    .from("cars")
+    .select("whatsapp, telegram")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error(error);
+  }
+
+  const contact = Array.isArray(data) && data.length > 0 ? data[0] : null;
+
   let visibleCount = 0;
 
   if (wp) {
-    if (settings.whatsapp) {
-      wp.href = `https://wa.me/${settings.whatsapp}`;
+    if (contact && contact.whatsapp) {
+      wp.href = `https://wa.me/${contact.whatsapp}`;
       wp.style.display = "inline-flex";
       visibleCount++;
     } else {
@@ -255,8 +275,8 @@ function loadContact() {
   }
 
   if (tg) {
-    if (settings.telegram) {
-      tg.href = `https://t.me/${settings.telegram}`;
+    if (contact && contact.telegram) {
+      tg.href = `https://t.me/${contact.telegram}`;
       tg.style.display = "inline-flex";
       visibleCount++;
     } else {
