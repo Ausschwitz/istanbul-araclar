@@ -2,7 +2,7 @@ const SUPABASE_URL = "https://ynwybfequmttfqrloqtl.supabase.co";
 const SUPABASE_KEY = "sb_publishable_HmDxeh3imA0fEW8h6ygz-g_2zssLCfo";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let settings = JSON.parse(localStorage.getItem("settings")) || {
+const defaultSettings = {
   title: "İstanbul Araçlar",
   slogan: "Premium araçların sergilendiği özel galeri",
   whatsapp: "",
@@ -21,6 +21,20 @@ let settings = JSON.parse(localStorage.getItem("settings")) || {
     cardTextColor: "#ffffff",
     detailTextColor: "#ffffff"
   }
+};
+
+const savedSettings = JSON.parse(localStorage.getItem("settings")) || {};
+
+let settings = {
+  ...defaultSettings,
+  ...savedSettings,
+  colors: {
+    ...defaultSettings.colors,
+    ...(savedSettings.colors || {})
+  },
+  vipCount: 50,
+  normalCount: 150,
+  gridCount: 5
 };
 
 const FALLBACK_IMAGE =
