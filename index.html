@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AstraCarsClub</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İstanbul Araçlar</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body onload="loadCars()">
+  <header>
+    <h1 id="siteTitle">İstanbul Araçlar</h1>
+    <p id="slogan">Premium araçların sergilendiği özel galeri</p>
+  </header>
 
-  <header id="siteTitle"></header>
-
-  <div class="menu">
+  <nav class="menu">
     <a href="index.html">Ana Sayfa</a>
     <a href="iletisim.html">İletişim</a>
-  </div>
+  </nav>
 
-  <div id="slogan" style="padding: 12px;"></div>
+  <main class="page-wrap">
+    <section>
+      <h2 class="section-title">VIP Araçlar</h2>
+      <div id="vipCars" class="vip-grid"></div>
+    </section>
 
-  <div class="vip" id="vip"></div>
-  <div class="grid" id="normal"></div>
+    <section>
+      <h2 class="section-title">Tüm Araçlar</h2>
+      <div id="normalCars" class="normal-grid"></div>
+    </section>
+  </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
