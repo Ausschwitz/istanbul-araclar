@@ -10,6 +10,7 @@ const defaultSettings = {
   emptyText: "Yeni sahibini bekliyor",
   vipTitle: "VIP Araçlar",
   normalTitle: "Tüm Araçlar",
+  detailTitle: "Araç Detayı",
   vipCount: 50,
   normalCount: 150,
   gridCount: 5,
@@ -60,7 +61,8 @@ async function loadSettings() {
     telegram: data.telegram || defaultSettings.telegram,
     emptyText: data.empty_text || defaultSettings.emptyText,
     vipTitle: data.vip_title || defaultSettings.vipTitle,
-    normalTitle: data.normal_title || defaultSettings.normalTitle
+    normalTitle: data.normal_title || defaultSettings.normalTitle,
+    detailTitle: data.detail_title || defaultSettings.detailTitle
   };
 }
 
@@ -89,13 +91,14 @@ function setHeaderTexts(title = settings.title, slogan = settings.slogan) {
 
 function getCarThumb(car) {
   if (Array.isArray(car.images) && car.images.length > 0) {
-    return car.images[0];
+    const first = String(car.images[0] || "").trim();
+    if (first) return first;
   }
   return FALLBACK_IMAGE;
 }
 
 function go(id) {
-  window.location.href = `detay.html?id=${id}`;
+  window.open(`detay.html?id=${id}`, "_blank");
 }
 
 function createVipCard(car) {
@@ -198,7 +201,7 @@ async function loadCars() {
 async function loadDetail() {
   await loadSettings();
   applyThemeToPage();
-  setHeaderTexts("Araç Detayı", settings.slogan);
+  setHeaderTexts(settings.detailTitle, settings.slogan);
 
   const content = document.getElementById("content");
   if (!content) return;
