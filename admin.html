@@ -262,13 +262,13 @@
           <input id="siteSloganInput" placeholder="Slogan">
 
           <label>VIP Başlık</label>
-          <input id="vipTitleInput" placeholder="VIP Araçlar">
+          <input id="vipTitleInput" placeholder="VIP İlanlar">
 
           <label>Normal Başlık</label>
-          <input id="normalTitleInput" placeholder="Tüm Araçlar">
+          <input id="normalTitleInput" placeholder="Normal İlanlar ">
 
           <label>Detay Sayfa Başlığı</label>
-          <input id="detailTitleInput" placeholder="Araç Detayı">
+          <input id="detailTitleInput" placeholder="İlan Detayı">
 
           <label>WhatsApp</label>
           <input id="siteWhatsappInput" placeholder="90555...">
@@ -289,7 +289,7 @@
 
           <input type="hidden" id="editId">
 
-          <label>Araç Adı</label>
+          <label>Escort Adı</label>
           <input id="name" placeholder="Araç adı">
 
           <label>Kutu İç Yazısı</label>
@@ -303,13 +303,13 @@
           <textarea id="images" placeholder="Yüklenen fotoğraflar burada görünecek"></textarea>
 
           <label>Yaş</label>
-          <input id="age" placeholder="2023">
+          <input id="age" placeholder="19">
 
           <label>Boy</label>
-          <input id="height" placeholder="4.8 metre">
+          <input id="height" placeholder="1.70">
 
           <label>Kilo</label>
-          <input id="weight" placeholder="1800 kg">
+          <input id="weight" placeholder="55 kg">
 
           <label>Açıklama</label>
           <textarea id="description" placeholder="Açıklama"></textarea>
@@ -340,7 +340,7 @@
           </div>
 
           <button id="saveBtn" class="btn btn-success" style="margin-top:14px; width:100%;" onclick="saveCar()">
-            Araç Kaydet
+            Escort Kaydet
           </button>
 
           <button id="cancelEditBtn" class="btn btn-secondary hidden" style="margin-top:10px; width:100%;" onclick="cancelEdit()">
@@ -349,7 +349,7 @@
         </div>
 
         <div class="card full">
-          <h3>Araçları Yönet</h3>
+          <h3>Escortları Yönet</h3>
           <div id="vehicleList" class="vehicle-list"></div>
         </div>
       </div>
@@ -541,7 +541,7 @@
 
       if(error){
         list.innerHTML = "";
-        showStatus("panelStatus", "Araçlar yüklenemedi: " + error.message, "error");
+        showStatus("panelStatus", "Escortlar yüklenemedi: " + error.message, "error");
         return;
       }
 
@@ -549,7 +549,7 @@
         list.innerHTML = `
           <div class="vehicle-item">
             <div>
-              <strong>Henüz araç eklenmedi</strong>
+              <strong>Henüz escort eklenmedi</strong>
               <span>Liste boş</span>
             </div>
           </div>
@@ -636,7 +636,7 @@
       };
 
       if(!payload.name){
-        showStatus("panelStatus", "Araç adı gerekli", "error");
+        showStatus("panelStatus", "Escort adı gerekli", "error");
         return;
       }
 
@@ -662,7 +662,7 @@
         return;
       }
 
-      showStatus("panelStatus", editId ? "Araç güncellendi" : "Araç eklendi", "success");
+      showStatus("panelStatus", editId ? "Escort güncellendi" : "Escort eklendi", "success");
       clearCarForm();
       await loadVehicleList();
     }
@@ -673,7 +673,7 @@
       const { data, error } = await sb.from("cars").select("*").eq("id", id).single();
 
       if(error){
-        showStatus("panelStatus", "Araç getirilemedi: " + error.message, "error");
+        showStatus("panelStatus", "Escort getirilemedi: " + error.message, "error");
         return;
       }
 
@@ -691,7 +691,7 @@
       document.getElementById("type").value = data.type || "vip";
       document.getElementById("vipSlot").value = data.vip_slot || "";
       document.getElementById("normalSlot").value = data.normal_slot || "";
-      document.getElementById("saveBtn").textContent = "Araç Güncelle";
+      document.getElementById("saveBtn").textContent = "Escort Güncelle";
       document.getElementById("cancelEditBtn").classList.remove("hidden");
 
       toggleSlotInputs();
@@ -699,7 +699,7 @@
     }
 
     async function deleteCar(id){
-      const ok = confirm("Bu aracı silmek istiyor musun?");
+      const ok = confirm("Bu escort'u silmek istiyor musun?");
       if(!ok) return;
 
       clearStatus("panelStatus");
@@ -711,7 +711,7 @@
         return;
       }
 
-      showStatus("panelStatus", "Araç silindi", "success");
+      showStatus("panelStatus", "Escort silindi", "success");
       await loadVehicleList();
     }
   </script>
