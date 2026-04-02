@@ -23,19 +23,7 @@ const defaultSettings = {
   }
 };
 
-const savedSettings = JSON.parse(localStorage.getItem("settings")) || {};
-
-let settings = {
-  ...defaultSettings,
-  ...savedSettings,
-  colors: {
-    ...defaultSettings.colors,
-    ...(savedSettings.colors || {})
-  },
-  vipCount: 50,
-  normalCount: 150,
-  gridCount: 5
-};
+let settings = { ...defaultSettings };
 
 const FALLBACK_IMAGE =
   "https://via.placeholder.com/1200x800/5a0030/ffffff?text=Gorsel+Yok";
@@ -47,6 +35,29 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+async function loadSettings() {
+  const { data, error } = await sb
+    .from("settings")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (error || !data) {
+    console.error("Settings yüklenemedi:", error);
+    settings = { ...defaultSettings };
+    return;
+  }
+
+  settings = {
+    ...defaultSettings,
+    title: data.title || defaultSettings.title,
+    slogan: data.slogan || defaultSettings.slogan,
+    whatsapp: data.whatsapp || defaultSettings.whatsapp,
+    telegram: data.telegram || defaultSettings.telegram,
+    emptyText: data.empty_text || defaultSettings.emptyText
+  };
 }
 
 function applyThemeToPage() {
@@ -118,6 +129,7 @@ function createNormalCard(car) {
 }
 
 async function loadCars() {
+  await loadSettings();
   applyThemeToPage();
   setHeaderTexts(settings.title, settings.slogan);
 
@@ -175,8 +187,9 @@ async function loadCars() {
 }
 
 async function loadDetail() {
+  await loadSettings();
   applyThemeToPage();
-  setHeaderTexts("Araç Detayı", "Detaylı inceleme");
+  setHeaderTexts("Araç Detayı", settings.slogan);
 
   const content = document.getElementById("content");
   if (!content) return;
@@ -253,6 +266,7 @@ async function loadDetail() {
 }
 
 async function loadContact() {
+  await loadSettings();
   applyThemeToPage();
   setHeaderTexts(
     "Bizimle İletişime Geç",
@@ -263,24 +277,11 @@ async function loadContact() {
   const tg = document.getElementById("telegramLink");
   const empty = document.getElementById("contactEmpty");
 
-  const { data, error } = await sb
-    .from("cars")
-    .select("whatsapp, telegram")
-    .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(1);
-
-  if (error) {
-    console.error(error);
-  }
-
-  const contact = Array.isArray(data) && data.length > 0 ? data[0] : null;
-
   let visibleCount = 0;
 
   if (wp) {
-    if (contact && contact.whatsapp) {
-      wp.href = `https://wa.me/${contact.whatsapp}`;
+    if (settings.whatsapp) {
+      wp.href = `https://wa.me/${settings.whatsapp}`;
       wp.style.display = "inline-flex";
       visibleCount++;
     } else {
@@ -289,8 +290,8 @@ async function loadContact() {
   }
 
   if (tg) {
-    if (contact && contact.telegram) {
-      tg.href = `https://t.me/${contact.telegram}`;
+    if (settings.telegram) {
+      tg.href = `https://t.me/${settings.telegram}`;
       tg.style.display = "inline-flex";
       visibleCount++;
     } else {
@@ -301,4 +302,4 @@ async function loadContact() {
   if (empty) {
     empty.style.display = visibleCount === 0 ? "block" : "none";
   }
-}
+}  
