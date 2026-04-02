@@ -212,11 +212,6 @@
       border:1px solid #fecaca;
     }
 
-    .muted{
-      color:var(--muted);
-      line-height:1.7;
-    }
-
     @media (max-width: 900px){
       .grid{
         grid-template-columns:1fr;
@@ -265,6 +260,12 @@
 
           <label>Slogan</label>
           <input id="siteSloganInput" placeholder="Slogan">
+
+          <label>VIP Başlık</label>
+          <input id="vipTitleInput" placeholder="VIP Araçlar">
+
+          <label>Normal Başlık</label>
+          <input id="normalTitleInput" placeholder="Tüm Araçlar">
 
           <label>WhatsApp</label>
           <input id="siteWhatsappInput" placeholder="90555...">
@@ -328,13 +329,11 @@
           <div id="vipSlotWrap">
             <label>VIP Kutu Numarası</label>
             <input id="vipSlot" type="number" min="1" placeholder="Örn: 7">
-            <div class="slot-help">VIP sıralama: soldan sağa 1, 2; alt satır 3, 4 şeklinde gider.</div>
           </div>
 
           <div id="normalSlotWrap" class="hidden">
             <label>Normal Kutu Numarası</label>
             <input id="normalSlot" type="number" min="1" placeholder="Örn: 34">
-            <div class="slot-help">Normal sıralama: soldan sağa 1,2,3,4,5; alt satır 6,7,8... şeklinde gider.</div>
           </div>
 
           <button id="saveBtn" class="btn btn-success" style="margin-top:14px; width:100%;" onclick="saveCar()">
@@ -383,9 +382,7 @@
 
     async function initPage(){
       toggleSlotInputs();
-
       const { data: { session } } = await sb.auth.getSession();
-
       if(session){
         showPanel();
       } else {
@@ -408,14 +405,10 @@
 
     async function login(){
       clearStatus("loginStatus");
-
       const email = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value;
 
-      const { error } = await sb.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
 
       if(error){
         showStatus("loginStatus", "Giriş başarısız: " + error.message, "error");
@@ -441,12 +434,7 @@
     }
 
     async function loadSiteSettings(){
-      const { data, error } = await sb
-        .from("settings")
-        .select("*")
-        .eq("id", 1)
-        .single();
-
+      const { data, error } = await sb.from("settings").select("*").eq("id", 1).single();
       if(error){
         console.error(error);
         return;
@@ -454,6 +442,8 @@
 
       document.getElementById("siteTitleInput").value = data.title || "";
       document.getElementById("siteSloganInput").value = data.slogan || "";
+      document.getElementById("vipTitleInput").value = data.vip_title || "";
+      document.getElementById("normalTitleInput").value = data.normal_title || "";
       document.getElementById("siteWhatsappInput").value = data.whatsapp || "";
       document.getElementById("siteTelegramInput").value = data.telegram || "";
       document.getElementById("siteEmptyTextInput").value = data.empty_text || "";
@@ -465,15 +455,14 @@
       const payload = {
         title: document.getElementById("siteTitleInput").value.trim(),
         slogan: document.getElementById("siteSloganInput").value.trim(),
+        vip_title: document.getElementById("vipTitleInput").value.trim(),
+        normal_title: document.getElementById("normalTitleInput").value.trim(),
         whatsapp: document.getElementById("siteWhatsappInput").value.trim(),
         telegram: document.getElementById("siteTelegramInput").value.trim(),
         empty_text: document.getElementById("siteEmptyTextInput").value.trim()
       };
 
-      const { error } = await sb
-        .from("settings")
-        .update(payload)
-        .eq("id", 1);
+      const { error } = await sb.from("settings").update(payload).eq("id", 1);
 
       if(error){
         showStatus("panelStatus", "Site ayarları kaydedilemedi: " + error.message, "error");
@@ -523,14 +512,9 @@
             upsert: false
           });
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        const { data } = sb.storage
-          .from("car-images")
-          .getPublicUrl(filePath);
-
+        const { data } = sb.storage.from("car-images").getPublicUrl(filePath);
         uploadedUrls.push(data.publicUrl);
       }
 
@@ -539,14 +523,10 @@
 
     async function loadVehicleList(){
       clearStatus("panelStatus");
-
       const list = document.getElementById("vehicleList");
       list.innerHTML = "Yükleniyor...";
 
-      const { data, error } = await sb
-        .from("cars")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await sb.from("cars").select("*").order("created_at", { ascending: false });
 
       if(error){
         list.innerHTML = "";
@@ -660,16 +640,10 @@
       }
 
       let result;
-
       if(editId){
-        result = await sb
-          .from("cars")
-          .update(payload)
-          .eq("id", editId);
+        result = await sb.from("cars").update(payload).eq("id", editId);
       } else {
-        result = await sb
-          .from("cars")
-          .insert([payload]);
+        result = await sb.from("cars").insert([payload]);
       }
 
       if(result.error){
@@ -685,11 +659,7 @@
     async function editCar(id){
       clearStatus("panelStatus");
 
-      const { data, error } = await sb
-        .from("cars")
-        .select("*")
-        .eq("id", id)
-        .single();
+      const { data, error } = await sb.from("cars").select("*").eq("id", id).single();
 
       if(error){
         showStatus("panelStatus", "Araç getirilemedi: " + error.message, "error");
@@ -723,10 +693,7 @@
 
       clearStatus("panelStatus");
 
-      const { error } = await sb
-        .from("cars")
-        .delete()
-        .eq("id", id);
+      const { error } = await sb.from("cars").delete().eq("id", id);
 
       if(error){
         showStatus("panelStatus", "Silme hatası: " + error.message, "error");
