@@ -267,6 +267,9 @@
           <label>Normal Başlık</label>
           <input id="normalTitleInput" placeholder="Tüm Araçlar">
 
+          <label>Detay Sayfa Başlığı</label>
+          <input id="detailTitleInput" placeholder="Araç Detayı">
+
           <label>WhatsApp</label>
           <input id="siteWhatsappInput" placeholder="90555...">
 
@@ -444,6 +447,7 @@
       document.getElementById("siteSloganInput").value = data.slogan || "";
       document.getElementById("vipTitleInput").value = data.vip_title || "";
       document.getElementById("normalTitleInput").value = data.normal_title || "";
+      document.getElementById("detailTitleInput").value = data.detail_title || "";
       document.getElementById("siteWhatsappInput").value = data.whatsapp || "";
       document.getElementById("siteTelegramInput").value = data.telegram || "";
       document.getElementById("siteEmptyTextInput").value = data.empty_text || "";
@@ -457,6 +461,7 @@
         slogan: document.getElementById("siteSloganInput").value.trim(),
         vip_title: document.getElementById("vipTitleInput").value.trim(),
         normal_title: document.getElementById("normalTitleInput").value.trim(),
+        detail_title: document.getElementById("detailTitleInput").value.trim(),
         whatsapp: document.getElementById("siteWhatsappInput").value.trim(),
         telegram: document.getElementById("siteTelegramInput").value.trim(),
         empty_text: document.getElementById("siteEmptyTextInput").value.trim()
@@ -501,20 +506,26 @@
       const uploadedUrls = [];
 
       for (const file of files) {
-        const ext = file.name.split(".").pop() || "jpg";
-        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const safeName = file.name.replaceAll(" ", "-");
+        const fileName = `${Date.now()}-${safeName}`;
         const filePath = `cars/${fileName}`;
 
-        const { error } = await sb.storage
+        const { error: uploadError } = await sb.storage
           .from("car-images")
           .upload(filePath, file, {
-            contentType: file.type || "image/jpeg",
-            upsert: false
+            cacheControl: "3600",
+            upsert: true
           });
 
-        if (error) throw error;
+        if (uploadError) {
+          console.error("Upload error:", uploadError);
+          throw uploadError;
+        }
 
-        const { data } = sb.storage.from("car-images").getPublicUrl(filePath);
+        const { data } = sb.storage
+          .from("car-images")
+          .getPublicUrl(filePath);
+
         uploadedUrls.push(data.publicUrl);
       }
 
