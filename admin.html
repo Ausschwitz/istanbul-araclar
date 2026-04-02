@@ -258,6 +258,29 @@
 
       <div class="grid">
         <div class="card">
+          <h3>Site Ayarları</h3>
+
+          <label>Site Başlığı</label>
+          <input id="siteTitleInput" placeholder="Site başlığı">
+
+          <label>Slogan</label>
+          <input id="siteSloganInput" placeholder="Slogan">
+
+          <label>WhatsApp</label>
+          <input id="siteWhatsappInput" placeholder="90555...">
+
+          <label>Telegram</label>
+          <input id="siteTelegramInput" placeholder="kullaniciadi">
+
+          <label>Boş Kutu Yazısı</label>
+          <input id="siteEmptyTextInput" placeholder="Yeni sahibini bekliyor">
+
+          <button class="btn btn-primary" style="margin-top:14px; width:100%;" onclick="saveSiteSettings()">
+            Site Ayarlarını Kaydet
+          </button>
+        </div>
+
+        <div class="card">
           <h3>Araç Ekle / Düzenle</h3>
 
           <input type="hidden" id="editId">
@@ -323,18 +346,6 @@
           </button>
         </div>
 
-        <div class="card">
-          <h3>Bilgi</h3>
-          <p class="muted">
-            Bu panel artık verileri Supabase veritabanına kaydeder.
-            Burada eklediğin araçları siteye giren herkes görebilir.
-          </p>
-          <p class="muted">
-            Artık fotoğrafları direkt yükleyebilirsin.
-            Sistem dosyaları Supabase Storage içine yükler.
-          </p>
-        </div>
-
         <div class="card full">
           <h3>Araçları Yönet</h3>
           <div id="vehicleList" class="vehicle-list"></div>
@@ -391,6 +402,7 @@
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("panelScreen").classList.remove("hidden");
       clearCarForm();
+      await loadSiteSettings();
       await loadVehicleList();
     }
 
@@ -426,6 +438,49 @@
       const type = document.getElementById("type").value;
       document.getElementById("vipSlotWrap").classList.toggle("hidden", type !== "vip");
       document.getElementById("normalSlotWrap").classList.toggle("hidden", type !== "normal");
+    }
+
+    async function loadSiteSettings(){
+      const { data, error } = await sb
+        .from("settings")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if(error){
+        console.error(error);
+        return;
+      }
+
+      document.getElementById("siteTitleInput").value = data.title || "";
+      document.getElementById("siteSloganInput").value = data.slogan || "";
+      document.getElementById("siteWhatsappInput").value = data.whatsapp || "";
+      document.getElementById("siteTelegramInput").value = data.telegram || "";
+      document.getElementById("siteEmptyTextInput").value = data.empty_text || "";
+    }
+
+    async function saveSiteSettings(){
+      clearStatus("panelStatus");
+
+      const payload = {
+        title: document.getElementById("siteTitleInput").value.trim(),
+        slogan: document.getElementById("siteSloganInput").value.trim(),
+        whatsapp: document.getElementById("siteWhatsappInput").value.trim(),
+        telegram: document.getElementById("siteTelegramInput").value.trim(),
+        empty_text: document.getElementById("siteEmptyTextInput").value.trim()
+      };
+
+      const { error } = await sb
+        .from("settings")
+        .update(payload)
+        .eq("id", 1);
+
+      if(error){
+        showStatus("panelStatus", "Site ayarları kaydedilemedi: " + error.message, "error");
+        return;
+      }
+
+      showStatus("panelStatus", "Site ayarları kaydedildi", "success");
     }
 
     function clearCarForm(){
