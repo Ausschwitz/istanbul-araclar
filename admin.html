@@ -285,12 +285,12 @@
         </div>
 
         <div class="card">
-          <h3>Araç Ekle / Düzenle</h3>
+          <h3>Escort Ekle / Düzenle</h3>
 
           <input type="hidden" id="editId">
 
           <label>Escort Adı</label>
-          <input id="name" placeholder="Araç adı">
+          <input id="name" placeholder="Escort adı">
 
           <label>Kutu İç Yazısı</label>
           <input id="cardLabel" placeholder="Örn: Yeni / Özel / Güzeldir">
@@ -493,7 +493,7 @@
       document.getElementById("type").value = "vip";
       document.getElementById("vipSlot").value = "";
       document.getElementById("normalSlot").value = "";
-      document.getElementById("saveBtn").textContent = "Araç Kaydet";
+      document.getElementById("saveBtn").textContent = "Escort Kaydet";
       document.getElementById("cancelEditBtn").classList.add("hidden");
       toggleSlotInputs();
     }
@@ -673,7 +673,7 @@
       const { data, error } = await sb.from("cars").select("*").eq("id", id).single();
 
       if(error){
-        showStatus("panelStatus", "Escort getirilemedi: " + error.message, "error");
+        showStatus("panelStatus", "Escort Güncellenemedi: " + error.message, "error");
         return;
       }
 
