@@ -8,6 +8,8 @@ const defaultSettings = {
   whatsapp: "",
   telegram: "",
   emptyText: "Yeni sahibini bekliyor",
+  vipTitle: "VIP Araçlar",
+  normalTitle: "Tüm Araçlar",
   vipCount: 50,
   normalCount: 150,
   gridCount: 5,
@@ -56,7 +58,9 @@ async function loadSettings() {
     slogan: data.slogan || defaultSettings.slogan,
     whatsapp: data.whatsapp || defaultSettings.whatsapp,
     telegram: data.telegram || defaultSettings.telegram,
-    emptyText: data.empty_text || defaultSettings.emptyText
+    emptyText: data.empty_text || defaultSettings.emptyText,
+    vipTitle: data.vip_title || defaultSettings.vipTitle,
+    normalTitle: data.normal_title || defaultSettings.normalTitle
   };
 }
 
@@ -132,6 +136,11 @@ async function loadCars() {
   await loadSettings();
   applyThemeToPage();
   setHeaderTexts(settings.title, settings.slogan);
+
+  const vipTitleEl = document.getElementById("vipTitle");
+  const normalTitleEl = document.getElementById("normalTitle");
+  if (vipTitleEl) vipTitleEl.textContent = settings.vipTitle;
+  if (normalTitleEl) normalTitleEl.textContent = settings.normalTitle;
 
   const vipContainer = document.getElementById("vipCars");
   const normalContainer = document.getElementById("normalCars");
@@ -302,4 +311,4 @@ async function loadContact() {
   if (empty) {
     empty.style.display = visibleCount === 0 ? "block" : "none";
   }
-}  
+}
