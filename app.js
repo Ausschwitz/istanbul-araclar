@@ -3,14 +3,14 @@ const SUPABASE_KEY = "sb_publishable_HmDxeh3imA0fEW8h6ygz-g_2zssLCfo";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const defaultSettings = {
-  title: "İstanbul Araçlar",
-  slogan: "Premium araçların sergilendiği özel galeri",
+  title: "İstanbul Vip Escortlar",
+  slogan: "Vip Escortların sergilendiği özel galeri",
   whatsapp: "",
   telegram: "",
   emptyText: "Yeni sahibini bekliyor",
-  vipTitle: "VIP Araçlar",
-  normalTitle: "Tüm Araçlar",
-  detailTitle: "Araç Detayı",
+  vipTitle: "VIP Escortlar",
+  normalTitle: "Normal İlanlar",
+  detailTitle: "İlan Detayı",
   vipCount: 50,
   normalCount: 150,
   gridCount: 5,
@@ -160,8 +160,8 @@ async function loadCars() {
 
   if (error) {
     console.error(error);
-    vipContainer.innerHTML = `<div class="empty-box vip-empty">Araçlar yüklenemedi</div>`;
-    normalContainer.innerHTML = `<div class="empty-box">Araçlar yüklenemedi</div>`;
+    vipContainer.innerHTML = `<div class="empty-box vip-empty">Escortlar yüklenemedi</div>`;
+    normalContainer.innerHTML = `<div class="empty-box">Escortlar yüklenemedi</div>`;
     return;
   }
 
@@ -210,7 +210,7 @@ async function loadDetail() {
   const id = params.get("id");
 
   if (!id) {
-    content.innerHTML = '<div class="empty-box">Araç bulunamadı</div>';
+    content.innerHTML = '<div class="empty-box">Escort bulunamadı</div>';
     return;
   }
 
@@ -222,7 +222,7 @@ async function loadDetail() {
 
   if (error || !data) {
     console.error(error);
-    content.innerHTML = '<div class="empty-box">Araç bulunamadı</div>';
+    content.innerHTML = '<div class="empty-box">Escort bulunamadı</div>';
     return;
   }
 
@@ -282,7 +282,7 @@ async function loadContact() {
   applyThemeToPage();
   setHeaderTexts(
     "Bizimle İletişime Geç",
-    "Hızlı iletişim için aşağıdaki kanalları kullanabilirsiniz."
+    "Sadece siteye ilan vermek için iletişime geçiniz.Hızlı iletişim için aşağıdaki kanalları kullanabilirsiniz."
   );
 
   const wp = document.getElementById("whatsappLink");
