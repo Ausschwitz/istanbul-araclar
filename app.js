@@ -111,7 +111,7 @@ function createVipCard(car) {
   div.className = "card vip-card";
   div.onclick = () => go(car.id);
   div.innerHTML = `
-    <img src="${thumb}" alt="${escapeHtml(car.name)}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+    <img src="${thumb}" alt="${escapeHtml(car.name)} İstanbul vip escort kadın görseli" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
     ${labelHtml}
     <div class="overlay">${escapeHtml(car.name)}</div>
   `;
@@ -128,7 +128,7 @@ function createNormalCard(car) {
   div.className = "card normal-card";
   div.onclick = () => go(car.id);
   div.innerHTML = `
-    <img src="${thumb}" alt="${escapeHtml(car.name)}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+    <img src="${thumb}" alt="${escapeHtml(car.name)} İstanbul vip escort kadın görseli" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
     ${labelHtml}
     <div class="overlay">${escapeHtml(car.name)}</div>
   `;
