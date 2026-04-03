@@ -3,11 +3,11 @@ const SUPABASE_KEY = "sb_publishable_HmDxeh3imA0fEW8h6ygz-g_2zssLCfo";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function generateSeoText(car) {
-  return `İstanbul VIP Escort Galerisi içinde yer alan ${car.name}, dikkat çekici profillerden biridir. Yaşı ${car.age}, boyu ${car.height}, kilosu ${car.weight} ile öne çıkar. ${car.description ? car.description + "." : "Kendine has tarzı ve dikkat çeken yapısıyla öne çıkar."}`;
+  return `İstanbul Makina VIP Escort Galerisi içinde yer alan ${car.name}, dikkat çekici profillerden biridir. Yaşı ${car.age}, boyu ${car.height}, kilosu ${car.weight} ile öne çıkar. ${car.description ? car.description + "." : "Kendine has tarzı ve dikkat çeken yapısıyla öne çıkar."}`;
 }
 
 const defaultSettings = {
-  title: "İstanbul Vip Escortlar",
+  title: "İstanbul Makina Vip Escortlar",
   slogan: "Vip Escortların sergilendiği özel galeri",
   whatsapp: "",
   telegram: "",
