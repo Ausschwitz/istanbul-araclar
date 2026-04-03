@@ -259,13 +259,17 @@ async function loadDetail() {
     buttonsHtml += `<a class="contact-btn telegram-btn" target="_blank" href="https://t.me/${escapeHtml(data.telegram)}">✈️ Telegram</a>`;
   }
 
-  content.innerHTML = `
-    <div class="detail-wrap">
-      <h1 class="detail-title">${escapeHtml(data.name)}</h1>
+ const seoText = generateSeoText(data);
 
-      <div class="detail-gallery">
-        ${galleryHtml}
-      </div>
+content.innerHTML = `
+  <div class="detail-wrap">
+    <h1 class="detail-title">${escapeHtml(data.name)}</h1>
+
+    <p class="seo-text">${seoText}</p>
+
+    <div class="detail-gallery">
+      ${galleryHtml}
+    </div>
 
       <div class="car-specs specs">
         ${data.age ? `<div>🎂 Yaş: ${escapeHtml(data.age)}</div>` : ""}
