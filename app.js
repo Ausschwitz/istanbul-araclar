@@ -235,7 +235,7 @@ async function loadDetail() {
     .map(
       (img) => `
         <div class="detail-slide">
-          <img src="${img}" alt="${escapeHtml(data.name)}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+          <img src="${img}" alt="${escapeHtml(data.name)} İstanbul vip escort kadın detayı" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
         </div>
       `
     )
